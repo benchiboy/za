@@ -1,0 +1,46 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>MyMap.qml</file>
+        <file>html/map.html</file>
+        <file>images/jiantou.png</file>
+        <file>html/about.html</file>
+        <file>images/yuyin-48.png</file>
+        <file>images/xiaoxi-48.png</file>
+        <file>images/jianpan.png</file>
+        <file>images/emoji.png</file>
+        <file>component/Constant.qml</file>
+        <file>component/Icon.qml</file>
+        <file>component/IconButton.qml</file>
+        <file>component/IconLabel.qml</file>
+        <file>component/MainListView.qml</file>
+        <file>component/SampleTextArea.qml</file>
+        <file>component/Separator.qml</file>
+        <file>component/UI.js</file>
+        <file>Message.qml</file>
+        <file>images/wode.png</file>
+        <file>images/guanzhu.png</file>
+        <file>images/message.png</file>
+        <file>images/ditu.png</file>
+        <file>FollowList.qml</file>
+        <file>Me.qml</file>
+        <file>component/TopBar.qml</file>
+        <file>images/help.png</file>
+        <file>images/navigation_next_item.png</file>
+        <file>images/navigation_previous_item.png</file>
+        <file>images/tuichu.png</file>
+        <file>images/wo.png</file>
+        <file>MessageList.qml</file>
+        <file>SampleLabel.qml</file>
+        <file>SampleIcon.qml</file>
+        <file>images/plus.png</file>
+        <file>images/search.png</file>
+        <file>images/zhu.png</file>
+        <file>images/tupian.png</file>
+        <file>images/luyin.png</file>
+        <file>images/xiaolian.png</file>
+        <file>images/paizhao.png</file>
+    </qresource>
+</RCC>

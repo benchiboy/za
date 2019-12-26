@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Hello, World</title>
+
+<style type="text/css">
+    html{height:100%}
+    body{height:100%;margin:0px;padding:0px}
+    #container{height:100%}
+
+    button {
+        background: #41cd52;
+        color: #f0f0f0;
+                font-size:14px;
+        border: 0;
+        cursor: pointer;
+        padding-top: 6px;
+                padding-bottom:6px;
+                border-radius: 20px;
+    }
+
+        .pointer{
+                z:2000;
+                top:520px;
+                right:430px;
+                position:fixed;
+    }
+
+        .toolBox{
+                flex-direction：column;
+                #display:flex;
+                z:1000;
+                top:10px;
+                right:20px;
+                position:fixed;
+                #border: 1px solid red;
+        }
+
+        .toolBox-item{
+                margin-top:20px;
+        }
+
+  .inputContainer {
+        left:20px;
+        top:70px;
+        z:2000;
+        position:fixed;
+        width: 80%;
+        height: 30%;
+        border-radius: 10px;
+        #border:1px solid red;
+        background:#ddd;
+        box-shadow: 0 0 13px #000;
+  }
+
+  #recordBox {
+        position:fixed;
+        right:150px;
+        top:50px;
+        z:2000;
+        border-radius: 10px;
+        border:1px solid red;
+        padding:50px;
+        background:#ddd;
+        box-shadow: 0 0 13px #000;
+  }
+
+  .inputBox {
+        display:flex;
+        align-items:center;
+        height: 80%;
+        width: 100%;
+        margin-top:20px;
+        border-radius: 10px;
+        #border:1px solid red;
+        background:#ddd;
+   }
+
+  .comment_text{
+          width: 70%;
+          height:90%;
+          margin-left:10px;
+          background:white;
+          font-size:17px;
+          border-radius: 5px;
+          border:1px solid #ddd;
+          overflow:auto;
+   }
+
+  .operBox {
+        width: 30%;
+        #border:1px solid red;
+        display:flex;
+        align-items:center;
+        justify-content:space-around;
+  }
+
+  .emojiBox {
+        height:100%;
+        border-radius: 10px;
+  }
+  .emojiBox-item {
+        display:flex;
+        justify-content:space-around;
+        align-items:center;
+        height:80%;
+        background:white;
+        border-radius: 10px;
+        #border:1px solid red;
+  }
+
+
+
+
+
+</style>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=dfUfSO4Ey1AjIlvnHR0rxN9AzjljzITU">
+</script>
+</head>
+
+<body>
+   <div id="container"></div>
+   <div class="pointer" id="pointer">
+      <image src="images/jiantou.png" width=24 height=24 >
+   </div>
+
+    <div class="toolBox">
+                <div class="toolBox-item">
+                        <button name="msg" onclick="showSmsBox();">消息</button>
+        </div>
+                <div class="toolBox-item">
+                        <button name="msg" onclick="showVoiceBox()">语音</button>
+                 </div>
+                 <div class="toolBox-item">
+                        <button name="msg" onclick="addMarker('images/yuyin-48.png')">图片</button>
+                 </div>
+
+                 <div class="toolBox-item">
+                        <button name="msg" onclick="addMarker('images/xiaoxi-48.png')">标注</button>
+                 </div>
+
+        </div>
+
+   <div id="inputContainer" class="inputContainer" style="display:none;">
+                <div class="inputBox" id="inputBox">
+                        <div id="inputText"  contenteditable="true" class="comment_text" ></div>
+                        <div class="operBox">
+                            <image id="emojiButton" src="images/emoji.png" width=32 height=32 onclick="showEmojiBox();">
+                            <span style="margin-left:5px">
+                                    <button name="msg" onclick="commitSms();">发送</button>
+                            </span>
+                        </div>
+                </div>
+
+                <div id="emojiBox" class="emojiBox" style="display:none;">
+                        <div class="emojiBox-item">
+                                <image src="images/1.jpg" width=24 height=24 onclick="insertEmoji('images/1.jpg');">
+                                <image src="images/2.jpg" width=24 height=24 onclick="insertEmoji('images/2.jpg');">
+                                <image src="images/3.jpg" width=24 height=24 onclick="insertEmoji('images/3.jpg');">
+                                <image src="images/4.jpg" width=24 height=24 onclick="insertEmoji('images/4.jpg');">
+                                <image src="images/5.jpg" width=24 height=24 onclick="insertEmoji('images/5.jpg');">
+                                <image src="images/1.jpg" width=24 height=24 onclick="insertEmoji('images/1.jpg');">
+                                <image src="images/2.jpg" width=24 height=24 onclick="insertEmoji('images/2.jpg');">
+                                <image src="images/3.jpg" width=24 height=24 onclick="insertEmoji('images/3.jpg');">
+                                <image src="images/4.jpg" width=24 height=24 onclick="insertEmoji('images/4.jpg');">
+                                <image src="images/5.jpg" width=24 height=24 onclick="insertEmoji('images/5.jpg');">
+                                <image src="images/6.jpg" width=24 height=24 onclick="insertEmoji('images/6.jpg');">
+                        </div>
+                </div>
+        </div>
+
+        <div id="recordBox" class="recordBox" style="display:none;">
+                <div>
+                        <button name="msg" onclick="goCommand('sms')">开始录音</button>
+            </div>
+        </div>
+
+<script type="text/javascript">
+    var map = new BMap.Map("container");
+    // 创建地图实例
+    var point = new BMap.Point( 114.113,22.542);
+    // 创建点坐标
+    map.centerAndZoom(point, 18);
+    // 初始化地图，设置中心点坐标和地图级别
+</script>
+
+<script type="text/javascript">
+        function initPointer() {
+                var a = document.getElementById("pointer");//获取div块对象
+                var Height=document.documentElement.clientHeight;//取得浏览器页面可视区域的宽度
+                var Width=document.documentElement.clientWidth;//取得浏览器页面可视区域的宽度
+                var gao1 = a.offsetHeight;//获取div块的高度值
+                var gao2 = a.offsetWidth;//获取div块的宽度值
+                var Sgao1= (Height - gao1)/2+"px";
+                var Sgao2= (Width - gao2)/2+"px";
+                a.style.top=Sgao1;
+                a.style.left=Sgao2;
+                console.log("-------");
+        }
+
+        initPointer();
+
+        function showSmsBox() {
+                document.getElementById("inputText").innerText="";
+                if (document.getElementById("inputContainer").style.display=="none"){
+                        document.getElementById("inputContainer").style.display="block"
+                        document.getElementById("recordBox").style.display="none"
+                }else{
+                        document.getElementById("inputContainer").style.display="none"
+                }
+        }
+
+        function commitSms() {
+                var timeno=new Date().getTime();
+                var msgText=document.getElementById("inputText").innerText;
+                addMarker('images/yuyin-48.png',timeno,msgText);
+
+                document.getElementById("inputContainer").style.display="none";
+        }
+
+        function showVoiceBox() {
+                if (document.getElementById("recordBox").style.display=="none"){
+                        document.getElementById("recordBox").style.display="block"
+                        document.getElementById("inputContainer").style.display="none"
+                }else{
+                        document.getElementById("recordBox").style.display="none"
+                }
+        }
+
+        function getEneterCnt() {
+                var msgText=document.getElementById("inputText").innerText;
+                var str = msgText;
+                alert(str+"END");
+                var c = "\n"; // 要计算的字符
+                var regex = new RegExp(c, 'g'); // 使用g表示整个字符串都要匹配
+                var result = str.match(regex);
+                var count = !result ? 0 : result.length;
+                console.log(c + " 的数量为 " + count);
+                return count;
+        }
+
+        function inputKeyDown(event) {
+                //backspace Key
+                if (event.keyCode == 8){
+                        var i=getEneterCnt()
+                        if (i==0){
+                                document.getElementById("inputBox").style.height="32px";
+                                document.getElementById("inputText").style.height="31px";
+                                 return
+                        }
+                        var inputHpx=31+20*i+"px";
+                        var inputBoxHpx=31+22*i+"px";
+
+                        document.getElementById("inputBox").style.height=inputBoxHpx;
+                        document.getElementById("inputText").style.height=inputHpx;
+                }
+
+                //enter Key
+                if (event.keyCode == 13){
+                         var inputH=document.getElementById("inputText").offsetHeight;
+                         var inputBoxH=document.getElementById("inputBox").offsetHeight;
+                         var inputHpx=inputH+20+"px";
+                         var inputBoxHpx=inputBoxH+22+"px";
+                         document.getElementById("inputBox").style.height=inputBoxHpx;
+                         document.getElementById("inputText").style.height=inputHpx;
+                }
+        }
+
+        function showEmojiBox() {
+                if (document.getElementById("emojiBox").style.display=="none"){
+                        document.getElementById("emojiBox").style.display="block"
+                        document.getElementById("emojiButton").src="images/jianpan.png"
+                        document.getElementById("inputText").focus()
+                }else{
+                        document.getElementById("emojiBox").style.display="none"
+                        document.getElementById("emojiButton").src="images/emoji.png"
+                }
+        }
+
+        function heightAdjust() {
+                document.getElementById("inputBox").style.height="100px";
+                document.getElementById("inputText").style.height="100px";
+        }
+
+
+
+        function insertEmoji(url) {
+                this.insertHtmlAtCaret('<images src='+url+' width=24 height=24>');
+        }
+
+        function insertHtmlAtCaret(html) {
+                var sel, range;
+                if(window.getSelection) {
+                        // IE9 and non-IE
+                        sel = window.getSelection();
+                        if(sel.getRangeAt && sel.rangeCount) {
+                                range = sel.getRangeAt(0);
+                                range.deleteContents();
+                                // Range.createContextualFragment() would be useful here but is
+                                // non-standard and not supported in all browsers (IE9, for one)
+                                var el = document.createElement("div");
+                                el.innerHTML = html;
+
+                                var frag = document.createDocumentFragment(),
+                                        node, lastNode;
+                                while((node = el.firstChild)) {
+                                        lastNode = frag.appendChild(node);
+                                }
+                                range.insertNode(frag);
+                                // Preserve the selection
+                                if(lastNode) {
+                                        range = range.cloneRange();
+                                        range.setStartAfter(lastNode);
+                                        range.collapse(true);
+                                        sel.removeAllRanges();
+                                        sel.addRange(range);
+                                }
+                        }
+                } else if(document.selection && document.selection.type != "Control") {
+                        document.selection.createRange().pasteHTML(html);
+                }
+        }
+
+    function goGps(str) {
+         var opts = {
+              position : point,    // 指定文本标注所在的地理位置
+              offset   : new BMap.Size(30, -30)    //设置文本偏移量
+         }
+         var label = new BMap.Label("欢迎使用百度地图，这是一个简单的文本标注哦~", opts);  // 创建文本标注对象
+                    label.setStyle({
+                             color : "red",
+                             fontSize : "12px",
+                             height : "20px",
+                             lineHeight : "20px",
+                             fontFamily:"微软雅黑"
+                     });
+        map.addOverlay(label);
+    }
+
+    function getAddrByLocation(x,y){
+        // 根据坐标得到地址描述
+        var myGeo = new BMap.Geocoder();
+        myGeo.getLocation(new BMap.Point(x,y), function(result){
+            if (result){
+            }
+        });
+        gpsToBaidu(x,y);
+    }
+
+    function gpsToBaidu(x,y){
+       var ggPoint = new BMap.Point(x,y);
+       var convertor = new BMap.Convertor();
+       var pointArr = [];
+       pointArr.push(ggPoint);
+       convertor.translate(pointArr, 1, 5, translateCallback)
+    }
+
+    //坐标转换完之后的回调函数
+    translateCallback = function (data){
+      if(data.status === 0) {
+         var marker = new BMap.Marker(data.points[0]);
+           map.addOverlay(marker);
+           var label = new BMap.Label("转换后的百度坐标（正确）",{offset:new BMap.Size(20,-10)});
+           marker.setLabel(label); //添加百度label
+           map.setCenter(data.points[0]);
+           map.centerAndZoom(data.points[0], 19);
+           var myGeo = new BMap.Geocoder();
+              myGeo.getLocation(data.points[0], function(result){
+                 if (result){
+                    label.setContent(result.address)
+                }
+          });
+     }
+   }
+   //
+   function addMarker(imagesName,timeno,strMsg){
+                var top=document.documentElement.clientHeight;
+                var left=document.documentElement.clientWidth;
+                var px=Math.round(left/2)
+                var py=Math.round(top/2)
+                console.log("PX,PY========>",px,py)
+            var p=new  BMap.Pixel(px,py);
+            var p2=map.pixelToPoint(p);
+                console.log("PX,PY========>",p2.lng,p2.lat)
+                var myIcon = new BMap.Icon(imagesName, new BMap.Size(48, 48), {
+                });
+                var marker = new BMap.Marker(p2,{icon: myIcon});
+                map.addOverlay(marker);
+           var label = new BMap.Label(timeno, {offset: new BMap.Size(-20, -20)});
+
+                label.setStyle({display:"none"});//对label 样式隐藏
+                marker.setLabel(label);  //把label设置到maker上
+                marker.addEventListener("click", function(e) {
+                         var commentNo=e.target.getLabel().content;
+                         alert(commentNo);
+                });
+
+            var json ={};
+            json.text=strMsg
+            json.lng=p2.lng+""
+            json.lat=p2.lat+""
+            json.method="text"
+            var jsontext=JSON.stringify(json);
+            goCommand(jsontext)
+   }
+   //
+   function goCommand(cmdstr) {
+        var wsUri = "ws://localhost:1234";
+        var socket = new WebSocket(wsUri);
+        socket.onclose = function() {
+           console.error("web channel closed");
+        };
+        socket.onerror = function(error) {
+           console.error("web channel error: " + error);
+        };
+        socket.onmessage = function(e) {
+           alert(e.data+"=======")
+           socket.close();
+        };
+        socket.onopen = function() {
+           socket.send(cmdstr);
+        }
+    }
+</script>
+
+</body>
+</html>
