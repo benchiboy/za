@@ -29,14 +29,20 @@ Item {
     }
     ScrollView{
         background: Rectangle{
+            color: "grey"
         }
         anchors.top: parent.top
         anchors.topMargin: 42
         clip:true
         id:scroll
         width: parent.width
+
+
         property ScrollBar hScrollBar: ScrollBar.horizontal
         property ScrollBar vScrollBar: ScrollBar.vertical
+        //ScrollBar.horizontal.interactive: false
+        //ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+
         height: parent.height*0.80
         Column{
             spacing: 10
@@ -74,6 +80,7 @@ Item {
             isLeft=true
             obj.isMe=false
         }
+
     }
 
 
@@ -120,9 +127,11 @@ Item {
                 spacing: 10
                 TextArea{
                     id:userInput
+                    focus:true
                     width: mainRect.width*0.6
                     font.pixelSize: 18
                     placeholderText: "输入消息"
+                    selectByMouse: true
                     wrapMode:TextEdit.Wrap
                     background:Rectangle{
                         anchors.left: parent.left
@@ -139,6 +148,7 @@ Item {
                         mainRect.height=(userInput.height/35-1)*35 +90
                         scroll.height=messageBox.height-mainRect.height-41
                     }
+
                 }
                 Button{
                     width: send_title.width+20
@@ -155,14 +165,49 @@ Item {
                             text: qsTr("发送")
                         }
                     }
-                   onClicked: {
-                       console.log(userInput.text)
-                       sendMsg(userInput.text)
-                   }
+                    MouseArea {
+                        anchors.fill: parent
+                        id: mouseArea
+                        onClicked: lazyClicked.start();
+                    }
                 }
+
+
+                Button{
+                    width: send_title.width+20
+                    height: send_title.height+10
+                    background: Rectangle{
+                        radius: 10
+                        anchors.fill: parent
+                        color: "green"
+                        Text {
+                            id:send_title1
+                            anchors.centerIn: parent
+                            font.pixelSize: 18
+                            color: "white"
+                            text: qsTr("发送")
+                        }
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            scroll.height=scroll.height*0.4
+                        }
+                    }
+                }
+
             }
         }
     }
+
+    Timer {
+        id: lazyClicked
+        interval: 100
+        onTriggered: {
+            sendMsg(userInput.text)
+        }
+    }
+
 
     Component {
         id: itemCompont

@@ -1,7 +1,8 @@
 QT += quick  webview positioning websockets
+#QT +=  androidextras
 CONFIG += c++11
 
- QMAKE_LINK += -nostdlib++
+#QMAKE_LINK += -nostdlib++
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Refer to the documentation for the
@@ -14,14 +15,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+       # keyboard.cpp \
         main.cpp \
         mygps.cpp \
         mytcpsocket.cpp \
+       # qtbridgingandroid.cpp \
         websocket.cpp
 
 RESOURCES += qml.qrc
 
-# Additional import path used to resolve QML modules in Qt Creator's code model
+# Additional   import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
 
 # Additional import path used to resolve QML modules just for Qt Quick Designer
@@ -41,7 +44,8 @@ DISTFILES += \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew \
     android/gradlew.bat \
-    android/res/values/libs.xml \
+    android/res/values/libs.xml \ \
+    android/src/org/za/interface/notification/NotificationClient.java
 
 
 contains(ANDROID_TARGET_ARCH,arm64-v8a) {
@@ -50,6 +54,9 @@ contains(ANDROID_TARGET_ARCH,arm64-v8a) {
 }
 
 HEADERS += \
+  #  key_global.h \
+  #  keyboard.h \
     mygps.h \
     mytcpsocket.h \
+  #  qtbridgingandroid.h \
     websocket.h
