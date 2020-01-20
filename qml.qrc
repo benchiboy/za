@@ -42,5 +42,7 @@
         <file>images/luyin.png</file>
         <file>images/xiaolian.png</file>
         <file>images/paizhao.png</file>
+        <file>main_copy.qml</file>
+        <file>PicsList.qml</file>
     </qresource>
 </RCC>

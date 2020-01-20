@@ -1,133 +1,88 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtMultimedia 5.3
+import QtQuick.Window 2.12
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.3
-import "./component"
 
 Item {
-    id:messageBox
-    property string playFile: "9999999999"
+    id: window
+    anchors.fill: parent
     property bool isLeft:false
-
-    TopBar{
-          id:topbar
-          height: 40
-          SampleIcon {
-              iconSource:"images/navigation_previous_item.png"
-              anchors.left:  parent.left
-              anchors.leftMargin:  10
-              id: backButton
-              iconSize: Qt.size( topbar.height - 2,  topbar.height - 2)
-              onClicked: {
-                  tabBar.visible=true
-                  listView.visible=true
-                  stackView.pop()
-              }
-          }
-
+    property int  keybordHeight:0
+    Connections {
+         target: notify
+         onKeyBordHeight: {
+            keybordHeight=height/screen.devicePixelRatio+1
+            if (height>0){
+                keybordHeight=height/screen.devicePixelRatio+1
+                console.log("onKeyBordHeight=======>",keybordHeight)
+                mainRect.anchors.bottomMargin=keybordHeight
+                scroll.height=screen.height-(toolbar.height+mainRect.height+keybordHeight)
+                console.log("scroll--->height--->",)
+                userInput.focus=true
+             }
+         }
     }
-    ScrollView{
-        background: Rectangle{
-            color: "grey"
-        }
-        anchors.top: parent.top
-        anchors.topMargin: 42
-        clip:true
-        id:scroll
-        width: parent.width
-
-
-        property ScrollBar hScrollBar: ScrollBar.horizontal
-        property ScrollBar vScrollBar: ScrollBar.vertical
-        //ScrollBar.horizontal.interactive: false
-        //ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-
-        height: parent.height*0.80
-        Column{
-            spacing: 10
-            id:msgText
-        }
-    }
-
-   Text {
-       id: textExample
-       color: "red"
-       visible: false
-       font.pixelSize: 16
-       clip: true
-       wrapMode: Text.WrapAnywhere
-       text: "hello"
-    }
-
-    function sendMsg(sendMsg){
-        scroll.vScrollBar.position=1
-        if (sendMsg===""){
-            return
-        }
-        textExample.text=sendMsg
-        var textH=textExample.contentHeight+10
-        var textW=textExample.contentWidth+10
-        console.log("GD====>",textH)
-        console.log("KD====>",textW)
-        var obj = itemCompont.createObject(msgText, {msgText:sendMsg,gd:textH,kd:textW,userName:"jieke"})
-        if (isLeft){
-             obj.x=scroll.width-obj.width-10
-             isLeft=false
-             obj.isMe=true
-        }else{
-            obj.x=10
-            isLeft=true
-            obj.isMe=false
-        }
-
-    }
-
 
     Rectangle{
-        id: mainRect
-        height: parent.height*0.20
-        width: parent.width
-        color: "lightgrey"
-        anchors.bottom: parent.bottom;
-        anchors.bottomMargin: 0
-        Column{
-            anchors.left: parent.left
-            anchors.leftMargin: 20
-            spacing: 15
-            Row{
-                anchors.left: parent.left
-                anchors.leftMargin: 20
-                id:tool_button
-                spacing: 30
-                Image {
-                    id: recordVoice
-                    source: "./images/luyin.png"
-                    width: 28
-                    height: 28
-                }
-                Image {
-                    id: pics
-                    source: "./images/tupian.png"
-                    width: 30
-                    height: 30
-                }
-                Image {
-                    id: smile
-                    source: "./images/xiaolian.png"
-                    width: 32
-                    height: 32
-                }
-            }
+      id: mainBox
+      anchors.fill: parent
+      Rectangle{
+          id:toolbar
+          height: 42
+          width:parent.width
+          color:"red"
+      }
 
-            Row{
-                anchors.top: tool_button.bottom
-                anchors.topMargin: 5
-                id:msg_box
+      ScrollView{
+            z:1000
+            anchors.top: toolbar.bottom
+            background: Rectangle{
+                color: "white"
+                anchors.fill: parent
+            }
+            clip:true
+            id:scroll
+            width: parent.width
+            property ScrollBar hScrollBar: ScrollBar.horizontal
+            property ScrollBar vScrollBar: ScrollBar.vertical
+
+            height:  Qt.platform.os === "android"?screen.height-(toolbar.height+mainRect.height):screen.desktopAvailableHeight-(toolbar.height+mainRect.height)
+            Column{
                 spacing: 10
+                id:msgText
+            }
+        }
+
+
+        Text {
+           id: textExample
+           color: "red"
+           visible: false
+           font.pixelSize: 16
+           clip: true
+           wrapMode: Text.WrapAnywhere
+           text: "hello"
+        }
+        Rectangle{
+            id: mainRect
+            height: 130
+            width: parent.width
+            color: "#ddd"
+            anchors.bottom: parent.bottom;
+            anchors.bottomMargin: 1
+            Row{
+                id:msg_box
+                anchors.fill: parent
+                spacing: 14
                 TextArea{
+                    anchors.verticalCenter:parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 20
                     id:userInput
-                    focus:true
+                    focus:false
+                    visible:true
                     width: mainRect.width*0.6
                     font.pixelSize: 18
                     placeholderText: "输入消息"
@@ -140,17 +95,33 @@ Item {
                         implicitHeight: 30
                         radius: 10
                         color:"white"
-                        border.color: "blue"
                     }
                     onHeightChanged:  {
-                        console.log("----=======>mainRect==>height....",mainRect.height)
-                        console.log("----=======>userInput==>height....",userInput.height)
+                        console.log("height.......")
                         mainRect.height=(userInput.height/35-1)*35 +90
-                        scroll.height=messageBox.height-mainRect.height-41
+                        scroll.height=scroll.height-41
                     }
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            if(Qt.platform.os === "android") {
+                                if(Qt.inputMethod.visible==false){
+                                    userInput.focus=false
+                                    Qt.inputMethod.show()
+                                }
+                            } else{
+                                userInput.focus=true
 
+                            }
+                        }
+                    }
                 }
+
                 Button{
+                    id:inputButton
+                    anchors.left: userInput.right
+                    anchors.leftMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
                     width: send_title.width+20
                     height: send_title.height+10
                     background: Rectangle{
@@ -168,14 +139,22 @@ Item {
                     MouseArea {
                         anchors.fill: parent
                         id: mouseArea
-                        onClicked: lazyClicked.start();
+                        onClicked:{
+                           if (userInput.text===""){
+                               return
+                           }
+                           lazyClicked.start();
+                        }
                     }
                 }
 
 
                 Button{
-                    width: send_title.width+20
-                    height: send_title.height+10
+                    anchors.left: inputButton.right
+                    anchors.leftMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: send_title1.width+20
+                    height: send_title1.height+10
                     background: Rectangle{
                         radius: 10
                         anchors.fill: parent
@@ -185,16 +164,25 @@ Item {
                             anchors.centerIn: parent
                             font.pixelSize: 18
                             color: "white"
-                            text: qsTr("发送")
+                            text: qsTr("TEST")
                         }
                     }
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: {
-                            scroll.height=scroll.height*0.4
+                        id: test1
+                        onClicked:{
+//                            console.log(mainRect.height)
+//                            console.log(scroll.height)
+//                            scroll.height=scroll.height-100
+//                            mainRect.anchors.bottomMargin=100
+//                            console.log(scroll.height)
+//                             console.log(mainRect.height)
+                            notify.openImage("swww")
                         }
                     }
                 }
+
+
 
             }
         }
@@ -205,9 +193,9 @@ Item {
         interval: 100
         onTriggered: {
             sendMsg(userInput.text)
+            userInput.text=""
         }
     }
-
 
     Component {
         id: itemCompont
@@ -215,7 +203,6 @@ Item {
              property bool isMe: false
              property string msgText: ""
              property string userName: ""
-
              property int   gd: 1
              property int   kd: 1
              spacing: 10
@@ -224,7 +211,7 @@ Item {
                 width: 30
                 height: 30
                 id: otherUser
-                source: "./images/zhu.png"
+                source: "./zhu.png"
              }
 
              Column{
@@ -274,9 +261,55 @@ Item {
                 width: 30
                 height: 30
                 id: meUser
-                source: "./images/wo.png"
+                source: "./user.png"
              }
          }
     }
-}
 
+
+    signal keyboardOpen()
+    onKeyboardOpen: {
+        if(Qt.platform.os === "android") {
+            console.log("===================>",Qt.inputMethod.visible)
+            if (Qt.inputMethod.visible==true){
+            }else{
+                mainRect.anchors.bottomMargin=0
+                scroll.height=screen.height-(toolbar.height+mainRect.height)
+                userInput.focus=false
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        Qt.inputMethod.visibleChanged.connect(keyboardOpen);
+        Qt.inputMethod.hide();
+       // console.log("screen.height=====",screen.height)
+    }
+
+
+    function sendMsg(sendMsg){
+        scroll.vScrollBar.position=1
+        if (sendMsg===""){
+            return
+        }
+        textExample.text=sendMsg
+        var textH=textExample.contentHeight+10
+        var textW=textExample.contentWidth+10
+        console.log("GD====>",textH)
+        console.log("KD====>",textW)
+        var obj = itemCompont.createObject(msgText, {msgText:sendMsg,gd:textH,kd:textW,userName:"jieke"})
+        if (isLeft){
+             obj.x=scroll.width-obj.width-10
+             isLeft=false
+             obj.isMe=true
+        }else{
+            obj.x=10
+            isLeft=true
+            obj.isMe=false
+        }
+    }
+
+
+
+
+}

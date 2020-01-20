@@ -1,8 +1,11 @@
 QT += quick  webview positioning websockets
-#QT +=  androidextras
+
+android {
+    QT += androidextras
+    QMAKE_LINK += -nostdlib++
+}
 CONFIG += c++11
 
-#QMAKE_LINK += -nostdlib++
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Refer to the documentation for the
@@ -21,6 +24,11 @@ SOURCES += \
         mytcpsocket.cpp \
        # qtbridgingandroid.cpp \
         websocket.cpp
+
+android {
+    SOURCES += \
+        notificationclient.cpp \
+}
 
 RESOURCES += qml.qrc
 
@@ -48,6 +56,11 @@ DISTFILES += \
     android/src/org/za/interface/notification/NotificationClient.java
 
 
+android {
+    DISTFILES += \
+        android/src/org/qtproject/example/notification/NotificationClient.java \
+}
+
 contains(ANDROID_TARGET_ARCH,arm64-v8a) {
     ANDROID_PACKAGE_SOURCE_DIR = \
         $$PWD/android
@@ -59,4 +72,11 @@ HEADERS += \
     mygps.h \
     mytcpsocket.h \
   #  qtbridgingandroid.h \
+ #   notificationclient.h \
     websocket.h
+
+
+android {
+    HEADERS += \
+        notificationclient.h \
+}

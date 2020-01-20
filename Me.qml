@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 import "./component"
+import QtQuick.Dialogs 1.3
 
 Page {
 
@@ -59,12 +60,11 @@ Page {
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        stackView.push("SigninScreen.qml",{tipText:"用户登录",currUser:currUser,returnUrl:"HomeMe.qml"})
+
+
                     }
                 }
             }
-
-
         }
 
 
@@ -114,6 +114,29 @@ Page {
 
         }
      }
+
+
+      TextArea{
+          Layout.preferredWidth: parent.width
+          Layout.preferredHeight: 50
+          id:userInput
+          focus:true
+          height: 50
+          width: 200
+          font.pixelSize: 18
+          placeholderText: "输入消息"
+
+
+          MouseArea{
+
+              onClicked: {
+                    console.log("==========>")
+              }
+
+          }
+      }
+
+
 
 
       Rectangle {

@@ -11,6 +11,7 @@ Page {
     TopBar{
           id:topbar
           height: 40
+          z:1000
           SampleIcon {
               iconSource:"images/plus.png"
               anchors.right: parent.right
@@ -21,53 +22,54 @@ Page {
 
               }
           }
+
+          RowLayout{
+             id:tabtype
+             height: 35
+             width: followView.width
+
+             Rectangle{
+                  Layout.alignment: Qt.AlignHCenter
+                  width: me_follow.contentWidth+10
+                  height: parent.height-5
+                  color: "grey"
+                  radius: 5
+                  Label{
+                      id:me_follow
+                      anchors.centerIn: parent
+                      text: "我关注的"
+                      color: "red"
+                  }
+             }
+
+             Rectangle{
+                  Layout.alignment: Qt.AlignHCenter
+                 width: follow_me.contentWidth+10
+                 height: parent.height-5
+                 color: "lightgrey"
+                 radius: 5
+                 Label{
+                      id:follow_me
+                      anchors.centerIn: parent
+                      text: "关注我的"
+                      color: "black"
+                  }
+             }
+          }
     }
 
 
-    RowLayout{
-       anchors.top: topbar.bottom
-       id:tabtype
-       height: 50
-       width: followView.width
 
-       Rectangle{
-            Layout.alignment: Qt.AlignHCenter
-            width: me_follow.contentWidth+10
-            height: parent.height-5
-            color: "grey"
-            radius: 5
-            Label{
-                id:me_follow
-                anchors.centerIn: parent
-                text: "我关注的"
-                color: "red"
-            }
-       }
-
-       Rectangle{
-            Layout.alignment: Qt.AlignHCenter
-           width: follow_me.contentWidth+10
-           height: parent.height-5
-           color: "lightgrey"
-           radius: 5
-           Label{
-                id:follow_me
-                anchors.centerIn: parent
-                text: "关注我的"
-                color: "black"
-            }
-       }
-    }
 
 
     ListView {
-        anchors.top: tabtype.bottom
+        anchors.top: topbar.bottom
         id: listView
         width: followView.width
         height: followView.height
         model: chatItemsModel
         highlightMoveDuration: 1000
-        highlightRangeMode: ListView.ApplyRange
+        //highlightRangeMode: ListView.ApplyRange
         // 控制滚动速度
         maximumFlickVelocity: 5000
         delegate: Rectangle {
@@ -106,8 +108,10 @@ Page {
                         anchors.verticalCenter: parent.verticalCenter
                         Layout.leftMargin: 20
                         font.pixelSize: 16
+                         font.family: "SimSun"
                         id:label_name
                         text: name
+
                     }
                 }
             }
@@ -129,7 +133,7 @@ Page {
      Rectangle {
             id: bar
             height: parent.height-41
-            width: Screen.pixelDensity * 15 // 2mn
+            width: screen.pixelDensity * 15 // 2mn
             anchors.top: parent.top
             anchors.topMargin: 41
             anchors.right: parent.right

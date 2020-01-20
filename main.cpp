@@ -6,6 +6,7 @@
 #include <QTcpServer>
 #include "websocket.h"
 #include "mytcpsocket.h"
+#include "notificationclient.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +17,9 @@ int main(int argc, char *argv[])
     QtWebView::initialize();
 
     QQmlApplicationEngine engine;
+
+
+
 
     const QString initialUrl = "WWW.SOHU.COM";
 
@@ -40,8 +44,16 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("webSocket", &myWebSocket);
 
 
+   // #ifdef Q_OS_ANDROID
+        NotificationClient notify;
+        engine.rootContext()->setContextProperty("notify", &notify);
+        notify.updateAndroidNotification();
+   // #endif
+
     engine.load(url);
 
+
+     app.setFont(QFont("Droid Sans Fallback",24));
 
     return app.exec();
 }

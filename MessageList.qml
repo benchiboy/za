@@ -12,9 +12,9 @@ Page {
     property int headPrtraitSize: 90
 
     TopBar{
-            id:topbar
+            id:tabbar
             height: 40
-
+            z:1000
             Rectangle{
                 anchors.left: parent.left
                 anchors.leftMargin: 20
@@ -36,7 +36,7 @@ Page {
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 id: iconButton1
-                iconSize: Qt.size( topbar.height - 2,  topbar.height - 2)
+                iconSize: Qt.size( tabbar.height - 2,  tabbar.height - 2)
                 onClicked: {
 
                 }
@@ -56,17 +56,16 @@ Page {
               width: chatsView.width
               height: chatsView.height
           }
-       }
+     }
 
     ListView {
-        anchors.top: topbar.bottom
+        anchors.top: tabbar.bottom
         id: listView
         width: chatsView.width
         height: chatsView.height
         model: chatItemsModel
         highlightMoveDuration: 1000
-        highlightRangeMode: ListView.ApplyRange
-
+      //  highlightRangeMode: ListView.ApplyRange
         // 控制滚动速度
         maximumFlickVelocity: 5000
         add: Transition {
@@ -168,6 +167,7 @@ Page {
                     fillMode: Image.PreserveAspectFit
                 }
 
+
                 Column {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: user_logo.right
@@ -178,14 +178,15 @@ Page {
                         Text {
                             id: user_name
                             text: qsTr(name)
-                            font.pixelSize: 16
-                            font.bold: true
+                            font.pointSize: 18
+
                         }
                         Text {
                             id: chat_time
                             text: qsTr(chatTime)
-                             font.pixelSize:12
-                             color: "grey"
+                            font.pointSize: 16
+                            color: "grey"
+                            font.family: "Droid Sans Fallback"
                         }
                     }
 
@@ -196,35 +197,24 @@ Page {
                               text: qsTr(chatContext)
                               elide: Text.ElideRight
                               color: "grey"
+                              font.pointSize: 16
+                              font.family: "Droid Sans Fallback"
                           }
                     }
                 }
-
-
 
             }
 
             MouseArea {
                 anchors.fill: parent
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
-                onPressAndHold: {
-                    chatItem.state = "Selected";
-                    chatItemMenu.aboutToHide.connect(function(){
-                        chatItemMenu.aboutToHide.disconnect(arguments.callee);
-                        chatItem.state = "UnSelected";
-                    });
-                    chatItemMenu.aboutToShow.connect(function(){
-                        chatItemMenu.aboutToShow.disconnect(arguments.callee);
-                        chatItem.state = "Selected";
-                    });
-                    chatItemMenu.chatItemIndex = index;
-                    chatItemMenu.popup();
-                }
+
                 onClicked: {
-                    //__LoadChatPage(1, name);
                     listView.visible=false
-                    tabBar.visible=false
+                    tabbar.visible=false
+                    footbar.visible=false
                     stackView.push("./Message.qml")
+
                 }
             }
         }
@@ -233,15 +223,13 @@ Page {
         ListModel {
             id: chatItemsModel
             Component.onCompleted: {
-                for(var i=0; i<30; i++) {
-
+                for(var i=0; i<5; i++) {
                     chatItemsModel
                     .append(
                          {
                              "chatTime": "12:12:12",
                              "name":"忍野忍",
                              "chatisBool": false,
-
                              "chatContext":"是开发借款时间付款时间222222222开始放假SDK😞"
                          });
                 }
