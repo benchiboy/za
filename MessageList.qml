@@ -11,6 +11,13 @@ Page {
 
     property int headPrtraitSize: 90
 
+    FontLoader { id: localFont; source: "images/NotoSansSC-Regular.ttf"
+    onStatusChanged:{
+        console.log("-------------------------->")
+    }
+    }
+
+
     TopBar{
             id:tabbar
             height: 40
@@ -23,12 +30,21 @@ Page {
                 width:msg_count.contentWidth+5
                 height: msg_count.contentHeight+5
                 radius: 10
+//                Text {
+//                    id: msg_count
+//                    color: "white"
+//                    text: qsTr("20")
+//                    anchors.centerIn: parent
+//                }
+
+
                 Text {
-                    id: msg_count
-                    color: "white"
-                    text: qsTr("20")
-                    anchors.centerIn: parent
+                    color: "red"
+                    id: name
+                    font.family: localFont.name; font.pixelSize: 16
+                    text: qsTr("忍也忍")
                 }
+
             }
 
             SampleIcon {
@@ -179,14 +195,21 @@ Page {
                             id: user_name
                             text: qsTr(name)
                             font.pointSize: 18
+                           // font.family: "Times"
+
+                            font.family: localFont.name; font.pixelSize: 16
 
                         }
+
+
                         Text {
                             id: chat_time
                             text: qsTr(chatTime)
                             font.pointSize: 16
                             color: "grey"
                             font.family: "Droid Sans Fallback"
+
+
                         }
                     }
 
@@ -197,8 +220,9 @@ Page {
                               text: qsTr(chatContext)
                               elide: Text.ElideRight
                               color: "grey"
-                              font.pointSize: 16
-                              font.family: "Droid Sans Fallback"
+                                font.family: localFont.name; font.pixelSize: 16
+                             // font.pointSize: 16
+                             // font.family: "Droid Sans Fallback"
                           }
                     }
                 }

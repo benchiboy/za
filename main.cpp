@@ -37,18 +37,18 @@ int main(int argc, char *argv[])
     qmlRegisterType<MyGPS>("qiuyuhan.org.MyGps",1,0,"MyGps");
 
 
-    MyTcpSocket mySocket;
-    engine.rootContext()->setContextProperty("tcpSocket", &mySocket);
+//    MyTcpSocket mySocket;
+//    engine.rootContext()->setContextProperty("tcpSocket", &mySocket);
 
-    MyWebsocket myWebSocket(1234);
-    engine.rootContext()->setContextProperty("webSocket", &myWebSocket);
+//    MyWebsocket myWebSocket(1234);
+//    engine.rootContext()->setContextProperty("webSocket", &myWebSocket);
 
 
-   // #ifdef Q_OS_ANDROID
+    #ifdef Q_OS_ANDROID
         NotificationClient notify;
         engine.rootContext()->setContextProperty("notify", &notify);
         notify.updateAndroidNotification();
-   // #endif
+    #endif
 
     engine.load(url);
 

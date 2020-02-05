@@ -14,20 +14,22 @@ ApplicationWindow {
         interactive:false
         anchors.fill: parent
         currentIndex: footbar.currentIndex
-        MyMap {
-            id:mymap
-        }
-        MessageList{
-            id:msglist
-        }
-
-        FollowList{
-            id:follow
-        }
 
         Me{
             id:me
         }
+
+//        MyMap {
+//            id:mymap
+//        }
+//        MessageList{
+//            id:msglist
+//        }
+
+//        FollowList{
+//            id:follow
+//        }
+
 
     }
 

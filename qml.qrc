@@ -44,5 +44,19 @@
         <file>images/paizhao.png</file>
         <file>main_copy.qml</file>
         <file>PicsList.qml</file>
+        <file>images/NotoSansSC-Regular.ttf</file>
+        <file>SignUpForm.qml</file>
+        <file>SignUpResult.qml</file>
+        <file>SignInScreen.qml</file>
+        <file>GButton.qml</file>
+        <file>MeDetail.qml</file>
+        <file>SignUpScreen.qml</file>
+        <file>HeadButton.qml</file>
+        <file>ResetpwdScreen.qml</file>
+        <file>ResetpwdResult.qml</file>
+        <file>comm.js</file>
+        <file>TopArea.qml</file>
+        <file>MsgBox.qml</file>
+        <file>ResetpwdForm.qml</file>
     </qresource>
 </RCC>
